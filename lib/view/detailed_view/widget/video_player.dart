@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:itunes_media_app/res/AppContextExtension.dart';
-import 'package:itunes_media_app/view/shared/text_view.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
 
-  const VideoPlayerWidget({super.key, required this.videoUrl});
+  const VideoPlayerWidget({Key? key, required this.videoUrl}) : super(key: key);
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
@@ -15,6 +13,7 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
   bool _hasError = false;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -44,23 +43,53 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     super.dispose();
   }
 
+  void _togglePlayPause() {
+    setState(() {
+      if (_isPlaying) {
+        _controller.pause();
+      } else {
+        _controller.play();
+      }
+      _isPlaying = !_isPlaying;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_hasError) {
       return Center(
-        child: MyTextView(
-          label: "No Preview Image",
-          fontSize: context.resources.dimension.smallText,
-          fontWeight: FontWeight.w300,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error, color: Colors.red, size: 50),
+            SizedBox(height: 10),
+            Text('Failed to load video', style: TextStyle(color: Colors.red)),
+          ],
         ),
       );
     }
 
-    return _controller.value.isInitialized
-        ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
-          )
-        : const Center(child: CircularProgressIndicator());
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        _controller.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              )
+            : Center(child: CircularProgressIndicator()),
+        Center(
+          
+          child: IconButton(
+            icon: Icon(
+              _isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: _togglePlayPause,
+          ),
+        ),
+      ],
+    );
   }
 }

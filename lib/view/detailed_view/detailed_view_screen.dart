@@ -5,6 +5,7 @@ import 'package:itunes_media_app/view/detailed_view/widget/video_player.dart';
 import 'package:itunes_media_app/view/shared/text_view.dart';
 import '../../../model/data_model/media_model/media_model.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailedViewScreen extends StatelessWidget {
   final Result media;
@@ -69,7 +70,9 @@ class DetailedViewScreen extends StatelessWidget {
                         color: context.resources.color.highlightColor,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          _launchURL(media.artistViewUrl ?? "");
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -98,7 +101,9 @@ class DetailedViewScreen extends StatelessWidget {
               fontWeight: FontWeight.w400,
             ),
             const SizedBox(height: 10),
-            VideoPlayerWidget(videoUrl: media.previewUrl ?? '',),
+            VideoPlayerWidget(
+              videoUrl: media.previewUrl ?? '',
+            ),
             const SizedBox(height: 16),
             MyTextView(
               label: "Description",
@@ -122,5 +127,12 @@ class DetailedViewScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _launchURL(String uri) async {
+    final Uri url = Uri.parse(uri);
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
   }
 }

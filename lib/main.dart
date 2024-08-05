@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:itunes_media_app/res/AppContextExtension.dart';
 import 'view/media_selection/media_selection_screen.dart';
+import 'view/roote_detection/root_detection_screen.dart';
 import 'view/search/search_screen.dart';
 import 'view/search_result/search_result_screen.dart';
 
@@ -27,8 +28,7 @@ class MyApp extends StatelessWidget {
         MediaSelectionScreen.id: (context) => const MediaSelectionScreen(),
         SearchResultScreen.id: (context) => const SearchResultScreen(),
       },
-      // home: HomeScreen(),
-      initialRoute: SearchScreen.id,
+      home: RootDetectionApp(),
     );
   }
 }
