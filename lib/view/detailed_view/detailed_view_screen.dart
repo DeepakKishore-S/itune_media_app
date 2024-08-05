@@ -130,7 +130,6 @@ class DetailedViewScreen extends StatelessWidget {
   }
 
   Future<void> _launchURL(String uri) async {
-    print(uri);
     final Uri url = Uri.parse(uri);
     if (!await launchUrl(url)) {
       throw 'Could not launch $url';
