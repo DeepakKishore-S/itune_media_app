@@ -19,7 +19,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
       ..addListener(() {
         if (_controller.value.hasError) {
           setState(() {
@@ -28,6 +28,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         }
       })
       ..initialize().then((_) {
+        _togglePlayPause();
         if (mounted) {
           setState(() {});
         }
