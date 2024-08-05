@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:itunes_media_app/view/shared/text_view.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
 
-  const VideoPlayerWidget({Key? key, required this.videoUrl}) : super(key: key);
+  const VideoPlayerWidget({super.key, required this.videoUrl});
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
@@ -57,13 +58,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     if (_hasError) {
-      return Center(
+      return const Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.error, color: Colors.red, size: 50),
             SizedBox(height: 10),
-            Text('Failed to load video', style: TextStyle(color: Colors.red)),
+            MyTextView(label: 'Failed to load video', color: Colors.red),
           ],
         ),
       );
@@ -77,9 +78,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 aspectRatio: _controller.value.aspectRatio,
                 child: VideoPlayer(_controller),
               )
-            : Center(child: CircularProgressIndicator()),
+            : const Center(child: CircularProgressIndicator()),
         Center(
-          
           child: IconButton(
             icon: Icon(
               _isPlaying ? Icons.pause : Icons.play_arrow,
